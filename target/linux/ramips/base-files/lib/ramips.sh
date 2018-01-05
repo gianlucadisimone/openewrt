@@ -205,6 +205,12 @@ ramips_board_detect() {
 	*"Kingston MLWG2")
 		name="mlwg2"
 		;;
+	*"Tecnojest MG-LAP")
+		name="mg-lap"
+		;;
+	*"Tecnojest IG-LAP")
+		name="ig-lap"
+		;;
 	*"Linksys E1700")
 		name="e1700"
 		;;

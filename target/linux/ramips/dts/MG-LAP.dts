@@ -1,0 +1,166 @@
+/dts-v1/;
+
+/include/ "mt7620n.dtsi"
+
+/ {
+      compatible = "mg-lap", "ralink,mt7620n-soc";
+      model = "MG-LAP";
+      
+      palmbus@10000000 {
+          gpio0: gpio@600 {
+              status = "okay";
+          };
+          
+          gpio1: gpio@638 {
+              status = "okay";
+          };
+          
+          gpio2: gpio@660 {
+              status = "okay";
+          };
+          
+          gpio3: gpio@688 {
+              status = "okay";
+          };
+
+	i2c@0 {
+		compatible = "i2c-gpio";
+		gpios =<&gpio0 1 0
+			&gpio0 2 0>;
+		i2c-gpio,delay-us = <20>;
+		#address-cells = <1>;
+		#size-cells = <0>;
+	}; 
+
+	  
+          
+          spi@b00 {
+              status = "okay";
+              
+              w25q128@0 {
+                  #address-cells = <1>;
+                  #size-cells = <1>;
+                  compatible = "w25q128";
+                  reg = <0 0>;
+                  linux,modalias = "m25p80";
+                  spi-max-frequency = <10000000>;
+                  
+                  partition@0 {
+                      label = "u-boot";
+                      reg = <0x0 0x30000>;
+                      read-only;
+                  };
+                  
+                  partition@30000 {
+                      label = "u-boot-env";
+                      reg = <0x30000 0x10000>;
+                      read-only;
+                  };
+                  
+                  factory: partition@40000 {
+                      label = "factory";
+                      reg = <0x40000 0x10000>;
+                      read-only;
+                  };
+                  
+                  partition@50000 {
+                      label = "firmware";
+                      reg = <0x50000 0xFB0000>;
+                  };
+              };
+
+          };
+      };
+
+
+      
+      ehci@101c0000 {
+          status = "okay";
+      };
+      
+      ohci@101c1000 {
+          status = "okay";
+      };
+      
+      ethernet@10100000 {
+          mtd-mac-address = <&factory 0x4>;
+          ralink,port-map = "wllll";
+      };
+      
+      wmac@10180000 {
+          ralink,mtd-eeprom = <&factory 0>;
+      };
+      
+      pinctrl {
+
+	state_default: pinctrl0 {
+              default {
+                  ralink,group = "ephy","pa","wled","i2c","mdio","spi refclk";
+                  ralink,function = "gpio";
+             }; 
+		spi_cs1: spi1 {
+			spi1 {
+				ralink,group = "spi";
+				ralink,function = "spi refclk";
+			};
+		};
+
+
+     	};
+
+      };
+
+
+	gpio_export { 
+		compatible = "gpio-export";
+		#size-cells = <0>;
+		gpios_in { 
+		    gpios = <
+			     &gpio2 2 0 	
+		             &gpio2 3 0>;
+		     gpio-export,direction_may_change;
+		 };
+		gpios_out { 
+		    gpios = <
+			     &gpio0 20 0 	
+		             &gpio0 21 0 
+		             &gpio1 13 0>;                      
+		    gpio-export,direction_may_change;
+		}; 
+
+        };     
+        gpio-leds {
+          compatible = "gpio-leds";
+          
+          power {
+              label = "MG-LAP:red:power";
+              gpios = <&gpio2 0 1>;
+          };
+          
+          lan {
+              label = "MG-LAP:green:lan";
+              gpios = <&gpio3 0 1>;
+          };
+          
+          wifi{
+              label = "MG-LAP:blue:wifi";
+              gpios = <&gpio2 4 1>;
+          };
+
+       };
+
+      
+        gpio-keys-polled {
+		compatible = "gpio-keys-polled";
+		#address-cells = <1>;
+		#size-cells = <0>;
+		poll-interval = <20>;
+		reset {
+			label = "reset";
+			gpios = <&gpio2 1 1>;
+			linux,code = <0x198>;
+		};
+	};
+
+ 	
+  };

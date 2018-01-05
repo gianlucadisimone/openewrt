@@ -144,6 +144,15 @@ case $board in
 		set_wifi_led "kingston:blue:wifi"
 		ucidef_set_led_default "system" "system" "kingston:blue:system" "1"
 		;;
+	mg-lap)
+		set_wifi_led "MG-LAP:blue:WIFI"
+		ucidef_set_led_netdev "LAN" "LAN" "LAP:green:LAN" "eth0.1"
+		ucidef_set_led_default "power" "power" "MG-LAP:red:Power" "1"
+		;;
+	ig-lap)
+		set_wifi_led "IG-LAP:blue:WIFI"
+		ucidef_set_led_default "power" "power" "IG-LAP:red:Power" "1"
+		;;
 	mofi3500-3gn)
 		set_usb_led "mofi3500-3gn:green:usb"
 		;;

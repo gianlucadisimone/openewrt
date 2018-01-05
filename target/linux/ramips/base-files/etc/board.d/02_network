@@ -2,7 +2,8 @@
 
 . /lib/functions.sh
 . /lib/ramips.sh
-. /lib/functions/uci-defaults-new.sh
+ /lib/functions/uci-defaults-new.sh
+# /lib/functions/uci-defaults.sh
 . /lib/functions/system.sh
 
 ramips_setup_rt3x5x_vlans()
@@ -71,7 +72,13 @@ ramips_setup_interfaces()
 	mlwg2)
 		ucidef_set_interface_lan "eth0.1"
 		;;
-
+	mg-lap) | \
+	ig-lap)
+		ucidef_set_interfaces_lan_wan "eth0.1" "eth0.2"
+		ucidef_add_switch "switch0" "1" "1"
+		ucidef_add_switch_vlan "switch0" "1" "1 2 3 4 6t"
+		ucidef_add_switch_vlan "switch0" "2" "0 6t"
+		;;
 	m2m)
 		ucidef_add_switch "switch0" "4"
 		ucidef_set_interface_lan "eth0"

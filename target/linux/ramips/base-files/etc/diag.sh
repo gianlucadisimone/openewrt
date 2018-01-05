@@ -105,6 +105,13 @@ get_status_led() {
 	mlwg2)
 		status_led="kingston:blue:system"
 		;;
+	mg-lap)
+
+		status_led="MG-LAP:red:Power"
+		;;
+	ig-lap)
+		status_led="IG-LAP:red:Power"
+		;;
 	mofi3500-3gn)
 		status_led="mofi3500-3gn:green:status"
 		;;
